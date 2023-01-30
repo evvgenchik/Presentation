@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <link rel="stylesheet" href="./css/style.css">
+
+  <title>reveal.js</title>
+
+  <link rel="stylesheet" href="dist/reset.css">
+  <link rel="stylesheet" href="dist/reveal.css">
+  <link rel="stylesheet" href="dist/theme/black.css">
+
+  <!-- Theme used for syntax highlighted code -->
+  <link rel="stylesheet" href="plugin/highlight/monokai.css">
+</head>
+
+<body>
+  <div class="reveal">
+    <div class="slides">
+      <section>Asynchronous in JavaScript
+        <img src="./icons/brain-blow.png" alt="">
+      </section>
+      <section>JavaScript is single threaded non-blocking <br>
+        asynchronous programming language
+        <img src="./icons/single-threaded.jpg" alt="">
+      </section>
+      <section>
+        Synchronous code (line by line).
+        The execution of functions occurs in the same place where they were called and at the moment they are called
+      </section>
+      <section>Example synchronous:
+        <pre><code data-trim data-noescape data-line-numbers> 
+let a = 1;
+let b = 2;
+let sum = a + b;
+console.log(sum);
+</code></pre>
+      </section>
+      <section>Asynchronous code
+        <img src="./icons/async-sync-compare.png" alt="">
+      </section>
+      <section>Example asynchronous:
+        <img src="./icons/eventLoop.png" alt="">
+      </section>
+      <section>
+        Callback hell
+        <pre><code data-trim data-noescape data-line-numbers> 
+       const verifyUser = function(username, password, callback){
+        dataBase.verifyUser(username, password, (error, userInfo) => {
+            if (error) {
+                callback(error)
+            }else{
+                dataBase.getRoles(username, (error, roles) => {
+                    if (error){
+                        callback(error)
+                    }else {
+                        dataBase.logAccess(username, (error)=> {
+                            if (error){
+                                callback(error);
+                            }
+                        })
+                    }
+                })
+            }
+        })
+      };          
+          </code></pre>
+      </section>
+      <section>
+        <img src="./icons/promise-hands.jpg" alt="">
+      </section>
+      <section>
+        Promises. How it really works.
+        <img src="./icons/promise-resolve-reject.svg" alt="">
+      </section>
+      <section>
+        Promise example
+        <pre><code data-trim data-noescape data-line-numbers> 
+          function request(url) {
+            return new Promise(function (resolve, reject) {
+              let responseFromServer
+              /*...*/
+              resolve(responseFromServer)
+            })
+          }
+          
+          request('/api/users/1')
+            .then((user) => request(`/api/photos/${user.id}/`))
+            .then((photo) => request(`/api/crop/${photo.id}/`))
+            .then((response) => console.log(response))
+          .catch((error) => console.error(error))              
+          </code></pre>
+      </section>
+      <section> Promises have their own drawbacks
+        <img src="./icons/symbol-broken-promises-28975185.jpg" alt="">
+      </section>
+      <section>
+        Async/await(ES8) - special syntax for working with promises:
+        <pre><code data-trim data-noescape data-line-numbers> 
+          async function f() {
+
+            let promise = new Promise((resolve, reject) => {
+              setTimeout(() => resolve("ready!"), 1000)
+            });
+          
+            let result = await promise; 
+          
+            alert(result); 
+          }
+          </code></pre>
+      </section>
+      <section>
+        <h3>Pros:</h3>
+        <ul>
+          <li>Cleaner</li>
+          <li>Error handling</li>
+          <li>Debugging</li>
+        </ul>
+      </section>
+      <section>
+        <h4>Thank you for your attention!</h4>
+      </section>
+    </div>
+  </div>
+
+  <script src="dist/reveal.js"></script>
+  <script src="plugin/notes/notes.js"></script>
+  <script src="plugin/markdown/markdown.js"></script>
+  <script src="plugin/highlight/highlight.js"></script>
+  <script>
+    // More info about initialization & config:
+    // - https://revealjs.com/initialization/
+    // - https://revealjs.com/config/
+    Reveal.initialize({
+      hash: true,
+      width: 1000,
+      // Learn about plugins: https://revealjs.com/plugins/
+      plugins: [RevealMarkdown, RevealHighlight, RevealNotes]
+    });
+  </script>
+</body>
+
+</html>
